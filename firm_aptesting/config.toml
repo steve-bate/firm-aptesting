@@ -1,0 +1,63 @@
+[server.capabilities]
+dereferencing.default = false
+# dereferencing.authz = false
+### C2S
+c2s.default = false
+# c2s.outbox.default = true
+# c2s.outbox.get = true
+# c2s.outbox.post = true
+# c2s.outbox.post.Create = true
+# c2s.outbox.post.Update = true
+# c2s.outbox.post.Delete = true
+# c2s.outbox.post.Follow = true
+# c2s.outbox.post.Add = false
+# c2s.outbox.post.Remove = false
+# c2s.outbox.post.Like = true
+# c2s.outbox.post.Block = false
+# c2s.outbox.post.Undo = true
+
+### S2S
+s2s.default = false
+# s2s.inbox.default = true
+# s2s.inbox.get = true
+# s2s.inbox.post = true
+# s2s.inbox.post.Create = true
+# s2s.inbox.post.Update = true
+# s2s.inbox.post.Delete = true
+# s2s.inbox.post.Follow = true
+# s2s.inbox.post.Accept = true
+# s2s.inbox.post.Reject = true
+# s2s.inbox.post.Add = true
+# s2s.inbox.post.Remove = true
+# s2s.inbox.post.Like = true
+# s2s.inbox.post.Announce = true
+# s2s.inbox.post.Undo = true
+# s2s.inbox.shared = true
+
+### Collections support - both spec'ed and custom
+collections.default = false
+# collections.liked = false
+# collections.followers = false
+# collections.following = false
+# collections.custom = false
+
+### Other AP featuress
+# tombstones = true
+# Some AP servers don't support standard audience processing
+# audience = false
+
+### Other non-AP features
+webfinger = false
+nodeinfo = false
+x-nodeinfo2 = false
+host-meta = false
+portable_contacts = false # poco
+robots_txt = false
+
+#
+# Test-specific Configurations
+#
+
+# [test_assumes_default_context]
+# xfail = "Server exception"
+# bug = true

@@ -1,0 +1,3507 @@
+{
+  "created": 1725885433.515928,
+  "duration": 7.378606081008911,
+  "exitcode": 1,
+  "root": "/Users/bate/Development/fediverse/firm/testing/firm-aptesting",
+  "environment": {
+    "StartTime": "2024-09-09T14:37:13.516138+02:00",
+    "Python": "3.12.2",
+    "Platform": "macOS-12.7.6-x86_64-i386-64bit",
+    "Packages": {
+      "pytest": "8.3.2",
+      "pluggy": "1.5.0",
+      "activitypub-testsuite": "0.1.0",
+      "firm-aptesting": "0.1.0"
+    },
+    "Plugins": {
+      "asyncio": "0.24.0",
+      "json-report": "1.5.0",
+      "metadata": "3.1.1",
+      "activitypub-testsuite": "0.1.0",
+      "anyio": "3.7.1"
+    },
+    "GIT_BRANCH": "main"
+  },
+  "summary": {
+    "failed": 7,
+    "skipped": 126,
+    "passed": 5,
+    "total": 138,
+    "collected": 138
+  },
+  "tests": [
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_activitystreams2.py::test_empty_array_is_omitted_or_null",
+      "lineno": 11,
+      "outcome": "failed",
+      "metadata": {
+        "documentation": "AS2 Section 2. If a property has an array value, the absence\n    of any items in that array must be represented by omitting\n    the property entirely or by setting the value to null."
+      },
+      "setup": {
+        "duration": 0.35623317188583314,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.01832619309425354,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/firm-aptesting/.venv/lib/python3.12/site-packages/httpx/_models.py",
+          "lineno": 749,
+          "message": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor/inbox'\nFor more information check: https://httpstatuses.com/404"
+        },
+        "traceback": [
+          {
+            "path": "firm_aptesting/tests/test_fedi_activitystreams2.py",
+            "lineno": 16,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 208,
+            "message": "in get_json"
+          },
+          {
+            "path": ".venv/lib/python3.12/site-packages/httpx/_models.py",
+            "lineno": 749,
+            "message": "HTTPStatusError"
+          }
+        ],
+        "stdout": "@@@@@ GET https://server.test/actor/inbox {}\n",
+        "longrepr": "local_actor = <firm_aptesting.support.FirmLocalActor object at 0x10e772f30>\n\n    def test_empty_array_is_omitted_or_null(local_actor: Actor):\n        \"\"\"AS2 Section 2. If a property has an array value, the absence\n        of any items in that array must be represented by omitting\n        the property entirely or by setting the value to null.\"\"\"\n>       inbox = local_actor.get_json(local_actor.inbox)\n\nfirm_aptesting/tests/test_fedi_activitystreams2.py:16: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n../activitypub-testsuite/activitypub_testsuite/support.py:208: in get_json\n    response.raise_for_status()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Response [404 Not Found]>\n\n    def raise_for_status(self) -> None:\n        \"\"\"\n        Raise the `HTTPStatusError` if one occurred.\n        \"\"\"\n        request = self._request\n        if request is None:\n            raise RuntimeError(\n                \"Cannot call `raise_for_status` as the request \"\n                \"instance has not been set on this response.\"\n            )\n    \n        if self.is_success:\n            return\n    \n        if self.has_redirect_location:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"Redirect location: '{0.headers[location]}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n        else:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n    \n        status_class = self.status_code // 100\n        error_types = {\n            1: \"Informational response\",\n            3: \"Redirect response\",\n            4: \"Client error\",\n            5: \"Server error\",\n        }\n        error_type = error_types.get(status_class, \"Invalid status code\")\n        message = message.format(self, error_type=error_type)\n>       raise HTTPStatusError(message, request=request, response=self)\nE       httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor/inbox'\nE       For more information check: https://httpstatuses.com/404\n\n.venv/lib/python3.12/site-packages/httpx/_models.py:749: HTTPStatusError"
+      },
+      "teardown": {
+        "duration": 0.0004573350306600332,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_activitystreams2.py::test_assumes_default_context",
+      "lineno": 24,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AS2 2.1.3 When a JSON-LD enabled Activity Streams 2.0\n    implementation encounters a JSON document identified using the\n    \"application/activity+json\" MIME media type, and that document\n    does not contain a @context property whose value includes a\n    reference to the normative Activity Streams 2.0 JSON-LD @context\n    definition, the implementation must assume that the normative\n    @context definition still applies.",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0007759379222989082,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_activitystreams2.py', 25, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0002494400832802057,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_activitystreams2.py::test_map_iris",
+      "lineno": 49,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AS2 2.2 - when an IRI that is not also a URI is given\n    for dereferencing, it must be mapped to a URI using the\n    steps in Section 3.1 of [RFC3987] and (2) when an IRI is\n    serving as an \"id\" value, it must not be so mapped.",
+        "ap_capability": [
+          "s2s.inbox.post",
+          "iri"
+        ],
+        "reason": "TODO Requirement is unclear"
+      },
+      "setup": {
+        "duration": 0.0001722958404570818,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_activitystreams2.py', 50, 'Skipped: TODO Requirement is unclear')"
+      },
+      "teardown": {
+        "duration": 0.0001617178786545992,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_activitystreams2.py::test_dont_map_iris_for_ids",
+      "lineno": 93,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AS2 2.2 - when an IRI that is not also a URI is given\n    for dereferencing, it must be mapped to a URI using the\n    steps in Section 3.1 of [RFC3987] and (2) when an IRI is\n    serving as an \"id\" value, it must not be so mapped.",
+        "ap_capability": [
+          "s2s.inbox.post",
+          "iri"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0006944150663912296,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_activitystreams2.py', 94, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00023655383847653866,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_adapters.py::test_server_support",
+      "lineno": 0,
+      "outcome": "passed",
+      "setup": {
+        "duration": 0.00219539413228631,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00039817485958337784,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.000536235049366951,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_adapters.py::test_local_actor",
+      "lineno": 4,
+      "outcome": "passed",
+      "setup": {
+        "duration": 0.0017138540279120207,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.31020296597853303,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0007932509761303663,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_remote_dereference",
+      "lineno": 6,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "Tests that a server will dereference an object provided as a URI\n    in a posted inbox activity. Basic linked data requirement.",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0008249580860137939,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 7, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0002997510600835085,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_multityped_activity_is_delivered_to_inbox",
+      "lineno": 30,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "To support extensions, a server is expected to\n    process (at least deliver) an AS2 activity with multiple types.",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0006613070145249367,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 31, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0002584329340606928,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_multityped_activity_is_delivered_to_outbox",
+      "lineno": 53,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "To support extensions, a server is expected to\n    process (at least deliver) an AS2 activity with multiple types.",
+        "ap_capability": [
+          "s2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0006556480657309294,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 54, 'Skipped: Missing required server capability: s2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0003613298758864403,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_multityped_object_is_delivered_to_inbox",
+      "lineno": 80,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "To support extensions, a server is expected to\n    process (at least deliver) an AS2 object with multiple types.",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0011751619167625904,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 81, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00034045707434415817,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_multityped_object_is_delivered_to_outbox",
+      "lineno": 105,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "To support extensions, a server is expected to\n    process (at least deliver) an AS2 activity with multiple types.",
+        "ap_capability": [
+          "s2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0006762600969523191,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 106, 'Skipped: Missing required server capability: s2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0002631440293043852,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_activity_with_multiple_actors",
+      "lineno": 131,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "The ActivityStreams 2.0 specification allows multiple actors for an activity.\n    Section 4. Properties. \"Describes one or more entities that either\n    performed or are expected to perform the activity. Any single activity can\n    have multiple actors.\" [link](https://www.w3.org/TR/activitystreams-vocabulary/#dfn-actor)\n    ",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0007002400234341621,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 132, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00029827095568180084,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_advanced.py::test_activity_with_multiple_objects",
+      "lineno": 158,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "The ActivityStreams 2.0 specification defined \"object\" as *nonfunctional*\n    (can have multiple values).",
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0008322419598698616,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_advanced.py', 159, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0002919367980211973,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_announce.py::test_inbox_share_local_from_remote",
+      "lineno": 6,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "Perform appropriate indication of the like being performed (See 7.10\n    for examples)",
+        "ap_capability": [
+          "collections.shares"
+        ],
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "reason": "Missing required server capability: collections.shares"
+      },
+      "setup": {
+        "duration": 0.0008940619882196188,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_announce.py', 7, 'Skipped: Missing required server capability: collections.shares')"
+      },
+      "teardown": {
+        "duration": 0.00042739417403936386,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_announce.py::test_inbox_undo_announce",
+      "lineno": 91,
+      "outcome": "skipped",
+      "setup": {
+        "duration": 0.0001944510731846094,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_announce.py', 92, 'Skipped: This requirement is not well-defined')"
+      },
+      "metadata": {
+        "reason": "This requirement is not well-defined"
+      },
+      "teardown": {
+        "duration": 0.00023314985446631908,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-https://www.w3.org/ns/activitystreams_Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0011700321920216084,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003758470993489027,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-https://www.w3.org/ns/activitystreams_Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0010372728575021029,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0006385562010109425,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0014286211226135492,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.002047071000561118,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0015459619462490082,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003348980098962784,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-as:Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "as:Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0025751939974725246,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004817091394215822,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[audience-as:Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "audience",
+          "value": "as:Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing",
+          "audience"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.001336812973022461,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004577978979796171,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-https://www.w3.org/ns/activitystreams_Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.001510055037215352,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004976049531251192,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-https://www.w3.org/ns/activitystreams_Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0013558620121330023,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00047048390842974186,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008625430054962635,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0002720640040934086,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008386678528040648,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00030607893131673336,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-as:Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "as:Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0017027780413627625,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0008773799054324627,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bcc-as:Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bcc",
+          "value": "as:Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0017619018908590078,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0007871610578149557,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-https://www.w3.org/ns/activitystreams_Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0015713910106569529,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003019138239324093,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-https://www.w3.org/ns/activitystreams_Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008629988878965378,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00027708103880286217,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.000819541048258543,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.000450588995590806,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.003208171809092164,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00045629520900547504,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-as:Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "as:Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0009022210724651814,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003144328948110342,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[to-as:Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "to",
+          "value": "as:Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008585019968450069,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00032820599153637886,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-https://www.w3.org/ns/activitystreams_Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0009183301590383053,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004595068749040365,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-https://www.w3.org/ns/activitystreams_Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008334300946444273,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00029180897399783134,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008144739549607038,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003153211437165737,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008509750477969646,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004620710387825966,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-as:Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "as:Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0013043051585555077,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0005608301144093275,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[cc-as:Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "cc",
+          "value": "as:Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0013982318341732025,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004828281234949827,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-https://www.w3.org/ns/activitystreams_Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0010566520504653454,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0005106539465487003,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-https://www.w3.org/ns/activitystreams_Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "https://www.w3.org/ns/activitystreams#Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0026583371218293905,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.000956130912527442,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.00198358204215765,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.00042597390711307526,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.001037798123434186,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0005246950313448906,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-as:Public-str]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "as:Public",
+          "value_type": "str"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0021480161231011152,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0007606721483170986,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_public_object_allowed[bto-as:Public-list]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "field": "bto",
+          "value": "as:Public",
+          "value_type": "list"
+        },
+        "documentation": "Checks retrieval authorization for public objects. It checks support\n    for the standard public access identifiers and for both a single value\n    and list for the recipients.",
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.011785203125327826,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 9, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.000487735029309988,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_nonpublic_object_forbidden",
+      "lineno": 45,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0009123701602220535,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 46, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0005014580674469471,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_object_by_attributedTo",
+      "lineno": 57,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0008964650332927704,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 58, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0013615619391202927,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_actor_allowed",
+      "lineno": 64,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.0009615791495889425,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 65, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0004287001211196184,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_outbox_allowed",
+      "lineno": 71,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.get"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.get"
+      },
+      "setup": {
+        "duration": 0.0009561260230839252,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 72, 'Skipped: Missing required server capability: c2s.outbox.get')"
+      },
+      "teardown": {
+        "duration": 0.0004047970287501812,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_inbox_nonauth_filtered",
+      "lineno": 77,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.inbox.get"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.get"
+      },
+      "setup": {
+        "duration": 0.0013185909483581781,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 78, 'Skipped: Missing required server capability: s2s.inbox.get')"
+      },
+      "teardown": {
+        "duration": 0.00037810206413269043,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_box_by_owner[inbox0]",
+      "lineno": 108,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "box": "inbox"
+        },
+        "ap_capability": [
+          "s2s.inbox.get"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.get"
+      },
+      "setup": {
+        "duration": 0.001059211092069745,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 109, 'Skipped: Missing required server capability: s2s.inbox.get')"
+      },
+      "teardown": {
+        "duration": 0.00035241409204900265,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_box_by_owner[inbox1]",
+      "lineno": 108,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "box": "inbox"
+        },
+        "ap_capability": [
+          "s2s.inbox.get"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.get"
+      },
+      "setup": {
+        "duration": 0.0008567469194531441,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 109, 'Skipped: Missing required server capability: s2s.inbox.get')"
+      },
+      "teardown": {
+        "duration": 0.0004044659435749054,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_get_object_by_posting_actor",
+      "lineno": 120,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "dereferencing"
+        ],
+        "reason": "Missing required server capability: dereferencing"
+      },
+      "setup": {
+        "duration": 0.000942653976380825,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 121, 'Skipped: Missing required server capability: dereferencing')"
+      },
+      "teardown": {
+        "duration": 0.0003913911059498787,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_anon_inbox_post_disallowed",
+      "lineno": 127,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0009544650092720985,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 128, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0003421618603169918,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_authz.py::test_nonowner_outbox_post_disallowed",
+      "lineno": 136,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0012852719519287348,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_authz.py', 137, 'Skipped: Missing required server capability: s2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00036468682810664177,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_block.py::test_actor_blocking",
+      "lineno": 6,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.post.Block"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post.Block"
+      },
+      "setup": {
+        "duration": 0.0009504528716206551,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_block.py', 7, 'Skipped: Missing required server capability: c2s.outbox.post.Block')"
+      },
+      "teardown": {
+        "duration": 0.0006114100106060505,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_collections.py::test_inbox_add",
+      "lineno": 5,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: collections.custom"
+      },
+      "setup": {
+        "duration": 0.001283874036744237,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_collections.py', 6, 'Skipped: Missing required server capability: collections.custom')"
+      },
+      "teardown": {
+        "duration": 0.00028080097399652004,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_collections.py::test_inbox_remove",
+      "lineno": 21,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: collections.custom"
+      },
+      "setup": {
+        "duration": 0.0008147051557898521,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_collections.py', 22, 'Skipped: Missing required server capability: collections.custom')"
+      },
+      "teardown": {
+        "duration": 0.0004525731783360243,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_collections.py::test_outbox_add",
+      "lineno": 39,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: collections.custom"
+      },
+      "setup": {
+        "duration": 0.0008240561001002789,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_collections.py', 40, 'Skipped: Missing required server capability: collections.custom')"
+      },
+      "teardown": {
+        "duration": 0.00027455599047243595,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_collections.py::test_outbox_remove",
+      "lineno": 55,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: collections.custom"
+      },
+      "setup": {
+        "duration": 0.0021357079967856407,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_collections.py', 56, 'Skipped: Missing required server capability: collections.custom')"
+      },
+      "teardown": {
+        "duration": 0.00043318304233253,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_get_object_allowed_media_types[application/activity+json]",
+      "lineno": 25,
+      "outcome": "passed",
+      "metadata": {
+        "params": {
+          "media_type": "application/activity+json"
+        },
+        "documentation": "AP Section 3.2 - The HTTP GET method may be dereferenced against\n    an object's id property to retrieve the activity.",
+        "ap_reqlevel": [
+          "MUST"
+        ]
+      },
+      "setup": {
+        "duration": 0.6892495180945843,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.010419324971735477,
+        "outcome": "passed",
+        "stdout": "@@@@@ GET https://server.test/61518947-8d8e-4acf-bd6c-bf290719aa26 {'https://server.test/61518947-8d8e-4acf-bd6c-bf290719aa26': {'to': 'as:Public', 'type': 'Note', 'content': 'Just a test...', 'id': 'https://server.test/61518947-8d8e-4acf-bd6c-bf290719aa26'}}\n"
+      },
+      "teardown": {
+        "duration": 0.001934708096086979,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_get_object_allowed_media_types[application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"]",
+      "lineno": 25,
+      "outcome": "passed",
+      "metadata": {
+        "params": {
+          "media_type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+        },
+        "documentation": "AP Section 3.2 - The HTTP GET method may be dereferenced against\n    an object's id property to retrieve the activity.",
+        "ap_reqlevel": [
+          "MUST"
+        ]
+      },
+      "setup": {
+        "duration": 0.7222960661165416,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.042502532014623284,
+        "outcome": "passed",
+        "stdout": "@@@@@ GET https://server.test/e21bb2ca-5c31-44a2-946d-170f77e29b00 {'https://server.test/e21bb2ca-5c31-44a2-946d-170f77e29b00': {'to': 'as:Public', 'type': 'Note', 'content': 'Just a test...', 'id': 'https://server.test/e21bb2ca-5c31-44a2-946d-170f77e29b00'}}\n"
+      },
+      "teardown": {
+        "duration": 0.0009025379549711943,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_missing_context_is_added",
+      "lineno": 51,
+      "outcome": "failed",
+      "metadata": {
+        "documentation": "AS2 Section 2.1.3 When a JSON-LD enabled Activity Streams 2.0\n    implementation encounters a JSON document identified using the\n    \"application/activity+json\" MIME media type, and that document\n    does not contain a @context property whose value includes a\n    reference to the normative Activity Streams 2.0 JSON-LD\n    @context definition, the implementation must assume that\n    the normative @context definition still applies."
+      },
+      "setup": {
+        "duration": 0.7904433871153742,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.018670144025236368,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/firm-aptesting/.venv/lib/python3.12/site-packages/httpx/_models.py",
+          "lineno": 749,
+          "message": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor/1'\nFor more information check: https://httpstatuses.com/404"
+        },
+        "traceback": [
+          {
+            "path": "firm_aptesting/tests/test_fedi_core.py",
+            "lineno": 72,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 208,
+            "message": "in get_json"
+          },
+          {
+            "path": ".venv/lib/python3.12/site-packages/httpx/_models.py",
+            "lineno": 749,
+            "message": "HTTPStatusError"
+          }
+        ],
+        "stdout": "@@@@@ GET https://server.test/actor/1 {}\n",
+        "longrepr": "local_actor = <firm_aptesting.support.FirmLocalActor object at 0x10ed8d550>\n\n    def test_missing_context_is_added(local_actor):\n        \"\"\"AS2 Section 2.1.3 When a JSON-LD enabled Activity Streams 2.0\n        implementation encounters a JSON document identified using the\n        \"application/activity+json\" MIME media type, and that document\n        does not contain a @context property whose value includes a\n        reference to the normative Activity Streams 2.0 JSON-LD\n        @context definition, the implementation must assume that\n        the normative @context definition still applies.\"\"\"\n        # Does this apply to other common AP media types?\n    \n        activity = local_actor.make_activity(\n            {\n                \"type\": \"Create\",\n                \"object\": local_actor.make_object(),\n            }\n        )\n        del activity[\"@context\"]\n        del activity[\"object\"][\"@context\"]\n        response = local_actor.post(local_actor.outbox, activity)\n        activity_uri = response.headers[\"Location\"]\n>       activity = local_actor.get_json(activity_uri)\n\nfirm_aptesting/tests/test_fedi_core.py:72: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n../activitypub-testsuite/activitypub_testsuite/support.py:208: in get_json\n    response.raise_for_status()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Response [404 Not Found]>\n\n    def raise_for_status(self) -> None:\n        \"\"\"\n        Raise the `HTTPStatusError` if one occurred.\n        \"\"\"\n        request = self._request\n        if request is None:\n            raise RuntimeError(\n                \"Cannot call `raise_for_status` as the request \"\n                \"instance has not been set on this response.\"\n            )\n    \n        if self.is_success:\n            return\n    \n        if self.has_redirect_location:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"Redirect location: '{0.headers[location]}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n        else:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n    \n        status_class = self.status_code // 100\n        error_types = {\n            1: \"Informational response\",\n            3: \"Redirect response\",\n            4: \"Client error\",\n            5: \"Server error\",\n        }\n        error_type = error_types.get(status_class, \"Invalid status code\")\n        message = message.format(self, error_type=error_type)\n>       raise HTTPStatusError(message, request=request, response=self)\nE       httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor/1'\nE       For more information check: https://httpstatuses.com/404\n\n.venv/lib/python3.12/site-packages/httpx/_models.py:749: HTTPStatusError"
+      },
+      "teardown": {
+        "duration": 0.0007269911002367735,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_required_actor_properties",
+      "lineno": 77,
+      "outcome": "failed",
+      "metadata": {
+        "documentation": "Actor objects MUST have, in addition to the properties mandated by 3.1 Object\n    Identifiers, the following properties: `inbox` and `outbox`",
+        "ap_reqlevel": [
+          "MUST"
+        ]
+      },
+      "setup": {
+        "duration": 0.9995279258582741,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.005647928919643164,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/firm-aptesting/.venv/lib/python3.12/site-packages/httpx/_models.py",
+          "lineno": 749,
+          "message": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor'\nFor more information check: https://httpstatuses.com/404"
+        },
+        "traceback": [
+          {
+            "path": "firm_aptesting/tests/test_fedi_core.py",
+            "lineno": 82,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 208,
+            "message": "in get_json"
+          },
+          {
+            "path": ".venv/lib/python3.12/site-packages/httpx/_models.py",
+            "lineno": 749,
+            "message": "HTTPStatusError"
+          }
+        ],
+        "stdout": "@@@@@ GET https://server.test/actor {}\n",
+        "longrepr": "local_actor = <firm_aptesting.support.FirmLocalActor object at 0x10ed60110>\n\n    @pytest.mark.ap_reqlevel(\"MUST\")\n    def test_required_actor_properties(local_actor):\n        \"\"\"Actor objects MUST have, in addition to the properties mandated by 3.1 Object\n        Identifiers, the following properties: `inbox` and `outbox`\"\"\"\n>       profile = local_actor.get_json(local_actor.id)\n\nfirm_aptesting/tests/test_fedi_core.py:82: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n../activitypub-testsuite/activitypub_testsuite/support.py:208: in get_json\n    response.raise_for_status()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Response [404 Not Found]>\n\n    def raise_for_status(self) -> None:\n        \"\"\"\n        Raise the `HTTPStatusError` if one occurred.\n        \"\"\"\n        request = self._request\n        if request is None:\n            raise RuntimeError(\n                \"Cannot call `raise_for_status` as the request \"\n                \"instance has not been set on this response.\"\n            )\n    \n        if self.is_success:\n            return\n    \n        if self.has_redirect_location:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"Redirect location: '{0.headers[location]}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n        else:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n    \n        status_class = self.status_code // 100\n        error_types = {\n            1: \"Informational response\",\n            3: \"Redirect response\",\n            4: \"Client error\",\n            5: \"Server error\",\n        }\n        error_type = error_types.get(status_class, \"Invalid status code\")\n        message = message.format(self, error_type=error_type)\n>       raise HTTPStatusError(message, request=request, response=self)\nE       httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/actor'\nE       For more information check: https://httpstatuses.com/404\n\n.venv/lib/python3.12/site-packages/httpx/_models.py:749: HTTPStatusError"
+      },
+      "teardown": {
+        "duration": 0.0015058820135891438,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_get",
+      "lineno": 92,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.get"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.get"
+      },
+      "setup": {
+        "duration": 0.0024561299942433834,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 93, 'Skipped: Missing required server capability: c2s.outbox.get')"
+      },
+      "teardown": {
+        "duration": 0.008692685049027205,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_post[application/activity+json]",
+      "lineno": 98,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "media_type": "application/activity+json"
+        },
+        "documentation": "AP Section 6. Client to server interaction takes place through clients posting\n    Activities to an actor's outbox. To do this, clients MUST discover the URL\n    of the actor's outbox from their profile and then MUST make an HTTP\n    POST request to this URL with the Content-Type of application/ld+json;\n    profile=\"https://www.w3.org/ns/activitystreams\".\n\n    AP Section 6. unless the activity is transient, MUST include\n    the new id in the Location header.\n\n    AP Section 6. The server MUST then add this new Activity to the outbox collection.\n    ",
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0039669969119131565,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 99, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00047000590711832047,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_post[application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"]",
+      "lineno": 98,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "media_type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+        },
+        "documentation": "AP Section 6. Client to server interaction takes place through clients posting\n    Activities to an actor's outbox. To do this, clients MUST discover the URL\n    of the actor's outbox from their profile and then MUST make an HTTP\n    POST request to this URL with the Content-Type of application/ld+json;\n    profile=\"https://www.w3.org/ns/activitystreams\".\n\n    AP Section 6. unless the activity is transient, MUST include\n    the new id in the Location header.\n\n    AP Section 6. The server MUST then add this new Activity to the outbox collection.\n    ",
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0011288579553365707,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 99, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0009702309034764767,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_post_bad_media_type",
+      "lineno": 132,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.007246334804221988,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 133, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00048369704745709896,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_create_sets_attributedTo[with_actor]",
+      "lineno": 148,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "with_actor"
+        },
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.001794579904526472,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 149, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00047723203897476196,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_create_sets_attributedTo[without_actor]",
+      "lineno": 148,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "without_actor"
+        },
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0026343530043959618,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 149, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.004165573976933956,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_create_merges_recipients",
+      "lineno": 169,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.003472553100436926,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 170, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0003350479528307915,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_reverse_chrono",
+      "lineno": 216,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "An OrderedCollection MUST be presented consistently\n    in reverse chronological order.",
+        "ap_capability": [
+          "c2s.activity.Create",
+          "c2s.outbox.post",
+          "c2s.outbox.get",
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.activity.Create"
+      },
+      "setup": {
+        "duration": 0.0009058448486030102,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 217, 'Skipped: Missing required server capability: c2s.activity.Create')"
+      },
+      "teardown": {
+        "duration": 0.0003232159651815891,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_authentication[local_actor2]",
+      "lineno": 245,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "other_actor": "local_actor2"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0011316118761897087,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 246, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0006987671367824078,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_authentication[unauthenticated_actor]",
+      "lineno": 245,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "other_actor": "unauthenticated_actor"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0008680520113557577,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 246, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005376460030674934,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_ignore_activity_id",
+      "lineno": 261,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.005668246885761619,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 262, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.000500295078381896,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Create-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Create",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Create"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014279880560934544,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00044002500362694263,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Create-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Create",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Create"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0024656709283590317,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.003489322029054165,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Update-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Update",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Update"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.03372351103462279,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0013424339704215527,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Update-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Update",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Update"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014551440253853798,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0003604188095778227,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Delete-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Delete",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Delete"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0019308028277009726,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.000338749960064888,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Delete-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Delete",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Delete"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0009196929167956114,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005166488699615002,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Follow-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Follow",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Follow"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0015203130897134542,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005132989026606083,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Follow-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Follow",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Follow"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.001595915062353015,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0007140939123928547,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Add-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Add",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Add"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0015603972133249044,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0006083711050450802,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Add-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Add",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Add"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0024509269278496504,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.000677070114761591,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Remove-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Remove",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Remove"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0016795981209725142,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005729370750486851,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Remove-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Remove",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Remove"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014535561203956604,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005307688843458891,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Like-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Like",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Like"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0013077829498797655,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00048404489643871784,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Like-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Like",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Like"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014318209141492844,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0019562961533665657,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Block-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Block",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Block"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.005986653966829181,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004907341208308935,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Block-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Block",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Block"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.002335884142667055,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005335870664566755,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Undo-with_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Undo",
+          "case": "with_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Undo"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0015371760819107294,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.019214075058698654,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_object_for_certain_activities[Undo-without_object]",
+      "lineno": 278,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "activity_type": "Undo",
+          "case": "without_object"
+        },
+        "documentation": "Delivers activity with 'object' property if the Activity type is one\n    of Create, Update, Delete, Follow, Add, Remove, Like, Block, Undo",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Undo"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.016878425143659115,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 279, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005475429352372885,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_target_for_add[with_target]",
+      "lineno": 383,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "with_target"
+        },
+        "documentation": "Delivers activity with 'target' property if the Activity type is one\n    of Add, Remove",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Add",
+          "collections.custom"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.009466749848797917,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 384, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.004808928817510605,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_target_for_add[without_target]",
+      "lineno": 383,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "without_target"
+        },
+        "documentation": "Delivers activity with 'target' property if the Activity type is one\n    of Add, Remove",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Add",
+          "collections.custom"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0020076241344213486,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 384, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005263150669634342,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_target_for_remove[with_target]",
+      "lineno": 424,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "with_target"
+        },
+        "documentation": "Delivers activity with 'target' property if the Activity type is one\n    of Add, Remove",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Remove",
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.002247340977191925,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 425, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005872130859643221,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_requires_target_for_remove[without_target]",
+      "lineno": 424,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "case": "without_target"
+        },
+        "documentation": "Delivers activity with 'target' property if the Activity type is one\n    of Add, Remove",
+        "ap_capability": [
+          "c2s.outbox.post",
+          "c2s.outbox.post.Remove",
+          "collections.custom"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0020946990698575974,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 425, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0003320069517940283,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_outbox_wraps_object_and_copies_recipients",
+      "lineno": 478,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AP Section 6.2.1 - The server MUST accept a valid [ActivityStreams]\n    object that isn't a subtype of Activity in the POST request to the outbox.\n\n    AP Section 6.2.1 - Any to, bto, cc, bcc, and audience properties\n    specified on the object MUST be copied over to the new\n    Create activity by the server.",
+        "ap_capability": [
+          "s2s.outbox-post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: s2s.outbox-post"
+      },
+      "setup": {
+        "duration": 0.0018717760685831308,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 479, 'Skipped: Missing required server capability: s2s.outbox-post')"
+      },
+      "teardown": {
+        "duration": 0.0004668440669775009,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_get",
+      "lineno": 521,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.inbox.get"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.get"
+      },
+      "setup": {
+        "duration": 0.0012032059021294117,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 522, 'Skipped: Missing required server capability: s2s.inbox.get')"
+      },
+      "teardown": {
+        "duration": 0.00032730400562286377,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_post[application/activity+json]",
+      "lineno": 529,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "media_type": "application/activity+json"
+        },
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "ap_reqlevel": [
+          "UNSPECIFIED"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.0009096108842641115,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 530, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0006278359796851873,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_post[application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"]",
+      "lineno": 529,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "media_type": "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\""
+        },
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "ap_reqlevel": [
+          "UNSPECIFIED"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.001443980960175395,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 530, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0032547309529036283,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_authorization",
+      "lineno": 550,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "UNSPECIFIED"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0016028080135583878,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 551, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.003358765970915556,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_post_bad_media_type",
+      "lineno": 567,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.000896994024515152,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 568, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005286319646984339,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_reverse_chrono",
+      "lineno": 585,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "An OrderedCollection MUST be presented consistently\n    in reverse chronological order.",
+        "ap_capability": [
+          "s2s.activity.Create"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: s2s.activity.Create"
+      },
+      "setup": {
+        "duration": 0.0013756770640611649,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 586, 'Skipped: Missing required server capability: s2s.activity.Create')"
+      },
+      "teardown": {
+        "duration": 0.0010255291126668453,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_core.py::test_inbox_accept_deduplicate",
+      "lineno": 615,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "Deduplicates activities returned by the inbox by comparing activity `id`s",
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "ap_capability": [
+          "s2s.inbox.post"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post"
+      },
+      "setup": {
+        "duration": 0.001396366162225604,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_core.py', 616, 'Skipped: Missing required server capability: s2s.inbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0005148160271346569,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delete.py::test_inbox_delete",
+      "lineno": 8,
+      "outcome": "skipped",
+      "setup": {
+        "duration": 0.00037559308111667633,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delete.py', 9, 'Skipped: How can internal state of local server be tested for this?')"
+      },
+      "metadata": {
+        "reason": "How can internal state of local server be tested for this?"
+      },
+      "teardown": {
+        "duration": 0.000235728919506073,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delete.py::test_outbox_delete",
+      "lineno": 36,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.outbox.post.Delete"
+        ],
+        "reason": "Missing required server capability: s2s.outbox.post.Delete"
+      },
+      "setup": {
+        "duration": 0.001260249875485897,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delete.py', 37, 'Skipped: Missing required server capability: s2s.outbox.post.Delete')"
+      },
+      "teardown": {
+        "duration": 0.0003303529229015112,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_local[to]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "to"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.006598588079214096,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 9, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004961199592798948,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_local[cc]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "cc"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.008840542053803802,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 9, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.03514475002884865,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_local[bcc]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "bcc"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014858818612992764,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 9, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004526388365775347,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_local[bto]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "bto"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0016664979048073292,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 9, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004321399610489607,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_local[audience]",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "audience"
+        },
+        "ap_capability": [
+          "c2s.outbox.post",
+          "audience"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.005275856936350465,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 9, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004952340386807919,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_remote[to]",
+      "lineno": 54,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "to"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0013948848936706781,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 55, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0004691320937126875,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_remote[cc]",
+      "lineno": 54,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "cc"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0013047698885202408,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 55, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0007852520793676376,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_remote[bto]",
+      "lineno": 54,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "bto"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0037130918353796005,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 55, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.00042917486280202866,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_remote[bcc]",
+      "lineno": 54,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "bcc"
+        },
+        "ap_capability": [
+          "c2s.outbox.post"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.012168608140200377,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 55, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.0011577429249882698,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_delivery.py::test_outbox_delivery_remote[audience]",
+      "lineno": 54,
+      "outcome": "skipped",
+      "metadata": {
+        "params": {
+          "recipient_key": "audience"
+        },
+        "ap_capability": [
+          "c2s.outbox.post",
+          "audience"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: c2s.outbox.post"
+      },
+      "setup": {
+        "duration": 0.0014362367801368237,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_delivery.py', 55, 'Skipped: Missing required server capability: c2s.outbox.post')"
+      },
+      "teardown": {
+        "duration": 0.000546775059774518,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_follow.py::test_inbox_accept_local_follow_add_actor_to_following",
+      "lineno": 7,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "If in reply to a Follow activity, adds actor to\n    receiver's Following Collection",
+        "ap_capability": [
+          "s2s.inbox.post.Accept",
+          "collections.following"
+        ],
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Accept"
+      },
+      "setup": {
+        "duration": 0.013386226957663894,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_follow.py', 8, 'Skipped: Missing required server capability: s2s.inbox.post.Accept')"
+      },
+      "teardown": {
+        "duration": 0.0005272200796753168,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_follow.py::test_inbox_accept_remote_follow_add_actor_to_followers",
+      "lineno": 39,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "Add the actor to the object user's Followers Collection.",
+        "ap_capability": [
+          "s2s.inbox.post.Accept",
+          "collections.followers"
+        ],
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Accept"
+      },
+      "setup": {
+        "duration": 0.0009449440985918045,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_follow.py', 40, 'Skipped: Missing required server capability: s2s.inbox.post.Accept')"
+      },
+      "teardown": {
+        "duration": 0.0005973491352051497,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_follow.py::test_inbox_reject_of_local_follow_doesnt_add_actor_to_following",
+      "lineno": 70,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "If in reply to a Follow activity, a Reject MUST NOT add actor to receiver's\n    Following Collection",
+        "ap_capability": [
+          "s2s.inbox.post.Reject",
+          "collections.following"
+        ],
+        "ap_reqlevel": [
+          "MUST"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Reject"
+      },
+      "setup": {
+        "duration": 0.006647078087553382,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_follow.py', 71, 'Skipped: Missing required server capability: s2s.inbox.post.Reject')"
+      },
+      "teardown": {
+        "duration": 0.005418013781309128,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_follow.py::test_inbox_undo_follow",
+      "lineno": 102,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.followers"
+        ],
+        "reason": "Missing required server capability: collections.followers"
+      },
+      "setup": {
+        "duration": 0.0009214209858328104,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_follow.py', 103, 'Skipped: Missing required server capability: collections.followers')"
+      },
+      "teardown": {
+        "duration": 0.0005853339098393917,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_follow.py::test_outbox_undo_follow",
+      "lineno": 154,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "collections.following"
+        ],
+        "reason": "Missing required server capability: collections.following"
+      },
+      "setup": {
+        "duration": 0.001423792215064168,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_follow.py', 155, 'Skipped: Missing required server capability: collections.following')"
+      },
+      "teardown": {
+        "duration": 0.002912948140874505,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_like.py::test_inbox_like_local",
+      "lineno": 5,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AP Section 7.10 The side effect of receiving this in an inbox is that the\n    server SHOULD increment the object's count of likes by adding the received\n    activity to the likes collection if this collection is present.\n\n    A local actor liking an object will be processed in the outbox.\n    A remote actor liking a local object is tested here.\n    A remote actor like of a remote object isn't so clear. Probably should\n    just refresh the local copy of the remote object or the object\n    likes collection (if any).",
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "s2s.inbox.post.Like"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Like"
+      },
+      "setup": {
+        "duration": 0.004382629180327058,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_like.py', 6, 'Skipped: Missing required server capability: s2s.inbox.post.Like')"
+      },
+      "teardown": {
+        "duration": 0.00032769888639450073,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_like.py::test_outbox_like_local",
+      "lineno": 50,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AP 6.8 Like Activity. The Like activity indicates the actor likes the object.\n    The side effect of receiving this in an outbox is that the server SHOULD\n    add the object to the actor's liked Collection.",
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "s2s.inbox.post.Like"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Like"
+      },
+      "setup": {
+        "duration": 0.000941932899877429,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_like.py', 51, 'Skipped: Missing required server capability: s2s.inbox.post.Like')"
+      },
+      "teardown": {
+        "duration": 0.0003033890388906002,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_like.py::test_inbox_undo_like",
+      "lineno": 94,
+      "outcome": "skipped",
+      "metadata": {
+        "documentation": "AP Section 7.10 The side effect of receiving this in an inbox is\n    that the server SHOULD increment the object's count of likes by\n    adding the received activity to the likes collection if\n    this collection is present.",
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "ap_capability": [
+          "s2s.inbox.post.Like"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Like"
+      },
+      "setup": {
+        "duration": 0.024224081076681614,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_like.py', 95, 'Skipped: Missing required server capability: s2s.inbox.post.Like')"
+      },
+      "teardown": {
+        "duration": 0.0003275058697909117,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_like.py::test_outbox_undo_like",
+      "lineno": 160,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "s2s.inbox.post.Undo",
+          "s2s.inbox.post.Like"
+        ],
+        "reason": "Missing required server capability: s2s.inbox.post.Undo"
+      },
+      "setup": {
+        "duration": 0.0009366660378873348,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_like.py', 161, 'Skipped: Missing required server capability: s2s.inbox.post.Undo')"
+      },
+      "teardown": {
+        "duration": 0.0002939940895885229,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_webfinger",
+      "lineno": 8,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "webfinger"
+        ],
+        "reason": "Missing required server capability: webfinger"
+      },
+      "setup": {
+        "duration": 0.0008562661241739988,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 9, 'Skipped: Missing required server capability: webfinger')"
+      },
+      "teardown": {
+        "duration": 0.0007000339683145285,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_nodeinfo",
+      "lineno": 32,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "nodeinfo"
+        ],
+        "reason": "Missing required server capability: nodeinfo"
+      },
+      "setup": {
+        "duration": 0.0026954971253871918,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 33, 'Skipped: Missing required server capability: nodeinfo')"
+      },
+      "teardown": {
+        "duration": 0.0008050249889492989,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_x_nodeinfo2",
+      "lineno": 46,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "x-nodeinfo2"
+        ],
+        "reason": "Missing required server capability: x-nodeinfo2"
+      },
+      "setup": {
+        "duration": 0.0013704551383852959,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 47, 'Skipped: Missing required server capability: x-nodeinfo2')"
+      },
+      "teardown": {
+        "duration": 0.0006733639165759087,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_host_meta",
+      "lineno": 58,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "host-meta"
+        ],
+        "reason": "Missing required server capability: host-meta"
+      },
+      "setup": {
+        "duration": 0.007575266994535923,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 59, 'Skipped: Missing required server capability: host-meta')"
+      },
+      "teardown": {
+        "duration": 0.0010622290428727865,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_robots_txt",
+      "lineno": 65,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "robots_txt"
+        ],
+        "reason": "Missing required server capability: robots_txt"
+      },
+      "setup": {
+        "duration": 0.0019740061834454536,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 66, 'Skipped: Missing required server capability: robots_txt')"
+      },
+      "teardown": {
+        "duration": 0.0005151729565113783,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_server_meta.py::test_portable_contacts",
+      "lineno": 73,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_capability": [
+          "portable_contacts"
+        ],
+        "reason": "Missing required server capability: portable_contacts"
+      },
+      "setup": {
+        "duration": 0.0020566179882735014,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_server_meta.py', 74, 'Skipped: Missing required server capability: portable_contacts')"
+      },
+      "teardown": {
+        "duration": 0.002451773965731263,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_update.py::test_outbox_partial_update",
+      "lineno": 15,
+      "outcome": "failed",
+      "metadata": {
+        "ap_reqlevel": [
+          "NOT_CLEAR"
+        ]
+      },
+      "setup": {
+        "duration": 0.6505740671418607,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.006211437052115798,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/firm-aptesting/.venv/lib/python3.12/site-packages/httpx/_models.py",
+          "lineno": 749,
+          "message": "httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/uuid:876e387a-5f03-45a5-927c-0e7df92521c6'\nFor more information check: https://httpstatuses.com/404"
+        },
+        "traceback": [
+          {
+            "path": "firm_aptesting/tests/test_fedi_update.py",
+            "lineno": 44,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 208,
+            "message": "in get_json"
+          },
+          {
+            "path": ".venv/lib/python3.12/site-packages/httpx/_models.py",
+            "lineno": 749,
+            "message": "HTTPStatusError"
+          }
+        ],
+        "stdout": "@@@@@ GET urn:uuid:876e387a-5f03-45a5-927c-0e7df92521c6 {'urn:uuid:876e387a-5f03-45a5-927c-0e7df92521c6': {'type': 'Note', 'name': 'test note', 'content': 'original content', 'attributedTo': 'https://server.test/actor', 'id': 'urn:uuid:876e387a-5f03-45a5-927c-0e7df92521c6'}}\n",
+        "longrepr": "local_actor = <firm_aptesting.support.FirmLocalActor object at 0x10eda9d00>\n\n    @pytest.mark.ap_reqlevel(\"NOT_CLEAR\")\n    def test_outbox_partial_update(local_actor):\n        original_object = local_actor.setup_object(\n            {\n                \"type\": \"Note\",\n                \"name\": \"test note\",\n                \"content\": \"original content\",\n                \"attributedTo\": local_actor.id,\n            }\n        ).copy()\n    \n        local_actor.post(\n            local_actor.outbox,\n            local_actor.make_activity(\n                {\n                    \"type\": \"Update\",\n                    \"object\": {\n                        \"id\": original_object[\"id\"],\n                        \"type\": \"Note\",\n                        \"summary\": \"test summary\",\n                        \"name\": None,\n                        \"preview\": None,  # Not in original object\n                        \"content\": \"modified content\",\n                    },\n                }\n            ),\n        )\n    \n>       modified_object = local_actor.get_json(original_object[\"id\"])\n\nfirm_aptesting/tests/test_fedi_update.py:44: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n../activitypub-testsuite/activitypub_testsuite/support.py:208: in get_json\n    response.raise_for_status()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Response [404 Not Found]>\n\n    def raise_for_status(self) -> None:\n        \"\"\"\n        Raise the `HTTPStatusError` if one occurred.\n        \"\"\"\n        request = self._request\n        if request is None:\n            raise RuntimeError(\n                \"Cannot call `raise_for_status` as the request \"\n                \"instance has not been set on this response.\"\n            )\n    \n        if self.is_success:\n            return\n    \n        if self.has_redirect_location:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"Redirect location: '{0.headers[location]}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n        else:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"For more information check: https://httpstatuses.com/{0.status_code}\"\n            )\n    \n        status_class = self.status_code // 100\n        error_types = {\n            1: \"Informational response\",\n            3: \"Redirect response\",\n            4: \"Client error\",\n            5: \"Server error\",\n        }\n        error_type = error_types.get(status_class, \"Invalid status code\")\n        message = message.format(self, error_type=error_type)\n>       raise HTTPStatusError(message, request=request, response=self)\nE       httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://server.test/uuid:876e387a-5f03-45a5-927c-0e7df92521c6'\nE       For more information check: https://httpstatuses.com/404\n\n.venv/lib/python3.12/site-packages/httpx/_models.py:749: HTTPStatusError"
+      },
+      "teardown": {
+        "duration": 0.000653604045510292,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "firm_aptesting/tests/test_fedi_update.py::test_inbox_replace",
+      "lineno": 61,
+      "outcome": "skipped",
+      "metadata": {
+        "ap_reqlevel": [
+          "SHOULD"
+        ],
+        "reason": "Requires access to internal local copies of remote objects"
+      },
+      "setup": {
+        "duration": 0.00028601614758372307,
+        "outcome": "skipped",
+        "longrepr": "('/Users/bate/Development/fediverse/firm/testing/firm-aptesting/firm_aptesting/tests/test_fedi_update.py', 62, 'Skipped: Requires access to internal local copies of remote objects')"
+      },
+      "teardown": {
+        "duration": 0.00018948898650705814,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "submodules/activitypub-testsuite/tests/test_media_headers.py::test_accept_header_parsing",
+      "lineno": 30,
+      "outcome": "failed",
+      "setup": {
+        "duration": 0.00036424282006919384,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00041109113954007626,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/activitypub-testsuite/activitypub_testsuite/support.py",
+          "lineno": 312,
+          "message": "TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'"
+        },
+        "traceback": [
+          {
+            "path": "submodules/activitypub-testsuite/tests/test_media_headers.py",
+            "lineno": 32,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 312,
+            "message": "TypeError"
+          }
+        ],
+        "longrepr": "def test_accept_header_parsing():\n>       accepted = parse_accept_header(\"audio/*; q=0.2, audio/basic\")\n\nsubmodules/activitypub-testsuite/tests/test_media_headers.py:32: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nheader_value = 'audio/*; q=0.2, audio/basic'\n\n    def parse_accept_header(header_value: str) -> list[MediaDescriptor]:\n        \"\"\"RFC2616 parser\"\"\"\n        accepted = []\n        for entry in xsplit(header_value, \",\"):\n            params = {}\n            if \";\" in entry:\n                fields = xsplit(entry, \";\")\n                media_range = fields[0]\n                for p in fields[1:]:\n                    if \"=\" in p:\n                        key, value = xsplit(p, \"=\", 1)\n                        if key == \"q\":\n                            value = float(value)\n                        params[key] = value\n                    else:\n                        params[key] = True\n            else:\n                media_range = entry\n            if \"q\" not in params:\n                params[\"q\"] = 1\n            type_, subtype = media_range.split(\"/\")\n            accepted.append(\n>               MediaDescriptor(mime_type=type_, mime_subtype=subtype, params=params)\n            )\nE           TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'\n\n../activitypub-testsuite/activitypub_testsuite/support.py:312: TypeError"
+      },
+      "teardown": {
+        "duration": 0.0002804389223456383,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "submodules/activitypub-testsuite/tests/test_media_headers.py::test_accept_header_parsing_2",
+      "lineno": 37,
+      "outcome": "failed",
+      "setup": {
+        "duration": 0.00022104103118181229,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.0002974218223243952,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/activitypub-testsuite/activitypub_testsuite/support.py",
+          "lineno": 312,
+          "message": "TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'"
+        },
+        "traceback": [
+          {
+            "path": "submodules/activitypub-testsuite/tests/test_media_headers.py",
+            "lineno": 39,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 312,
+            "message": "TypeError"
+          }
+        ],
+        "longrepr": "def test_accept_header_parsing_2():\n>       accepted = parse_accept_header(\n            \"text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c\"\n        )\n\nsubmodules/activitypub-testsuite/tests/test_media_headers.py:39: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nheader_value = 'text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c'\n\n    def parse_accept_header(header_value: str) -> list[MediaDescriptor]:\n        \"\"\"RFC2616 parser\"\"\"\n        accepted = []\n        for entry in xsplit(header_value, \",\"):\n            params = {}\n            if \";\" in entry:\n                fields = xsplit(entry, \";\")\n                media_range = fields[0]\n                for p in fields[1:]:\n                    if \"=\" in p:\n                        key, value = xsplit(p, \"=\", 1)\n                        if key == \"q\":\n                            value = float(value)\n                        params[key] = value\n                    else:\n                        params[key] = True\n            else:\n                media_range = entry\n            if \"q\" not in params:\n                params[\"q\"] = 1\n            type_, subtype = media_range.split(\"/\")\n            accepted.append(\n>               MediaDescriptor(mime_type=type_, mime_subtype=subtype, params=params)\n            )\nE           TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'\n\n../activitypub-testsuite/activitypub_testsuite/support.py:312: TypeError"
+      },
+      "teardown": {
+        "duration": 0.0003322339616715908,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "submodules/activitypub-testsuite/tests/test_media_headers.py::test_accept_header_parsing_3",
+      "lineno": 48,
+      "outcome": "failed",
+      "setup": {
+        "duration": 0.00038798688910901546,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00043351203203201294,
+        "outcome": "failed",
+        "crash": {
+          "path": "/Users/bate/Development/fediverse/firm/testing/activitypub-testsuite/activitypub_testsuite/support.py",
+          "lineno": 312,
+          "message": "TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'"
+        },
+        "traceback": [
+          {
+            "path": "submodules/activitypub-testsuite/tests/test_media_headers.py",
+            "lineno": 50,
+            "message": ""
+          },
+          {
+            "path": "../activitypub-testsuite/activitypub_testsuite/support.py",
+            "lineno": 312,
+            "message": "TypeError"
+          }
+        ],
+        "longrepr": "def test_accept_header_parsing_3():\n>       accepted = parse_accept_header(\n            \"text/*;q=0.3, text/html;q=0.7, text/html;level=1, \"\n            \"text/html;level=2;q=0.4, */*;q=0.5\"\n        )\n\nsubmodules/activitypub-testsuite/tests/test_media_headers.py:50: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nheader_value = 'text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5'\n\n    def parse_accept_header(header_value: str) -> list[MediaDescriptor]:\n        \"\"\"RFC2616 parser\"\"\"\n        accepted = []\n        for entry in xsplit(header_value, \",\"):\n            params = {}\n            if \";\" in entry:\n                fields = xsplit(entry, \";\")\n                media_range = fields[0]\n                for p in fields[1:]:\n                    if \"=\" in p:\n                        key, value = xsplit(p, \"=\", 1)\n                        if key == \"q\":\n                            value = float(value)\n                        params[key] = value\n                    else:\n                        params[key] = True\n            else:\n                media_range = entry\n            if \"q\" not in params:\n                params[\"q\"] = 1\n            type_, subtype = media_range.split(\"/\")\n            accepted.append(\n>               MediaDescriptor(mime_type=type_, mime_subtype=subtype, params=params)\n            )\nE           TypeError: MediaDescriptor.__init__() missing 2 required positional arguments: 'mime_suffix' and 'mime_tree'\n\n../activitypub-testsuite/activitypub_testsuite/support.py:312: TypeError"
+      },
+      "teardown": {
+        "duration": 0.00025548599660396576,
+        "outcome": "passed"
+      }
+    },
+    {
+      "nodeid": "submodules/activitypub-testsuite/tests/test_media_headers.py::test_content_type_parsing",
+      "lineno": 61,
+      "outcome": "passed",
+      "setup": {
+        "duration": 0.0003138110041618347,
+        "outcome": "passed"
+      },
+      "call": {
+        "duration": 0.00041363807395100594,
+        "outcome": "passed"
+      },
+      "teardown": {
+        "duration": 0.0030387260485440493,
+        "outcome": "passed"
+      }
+    }
+  ]
+}
