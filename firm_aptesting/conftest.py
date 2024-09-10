@@ -59,3 +59,27 @@ def test_client(server_app) -> TestClient:
     #     headers: dict[str, str] | None = None,
     #     follow_redirects: bool = True,
     return TestClient(server_app, base_url="https://server.test")
+
+#
+# activitypub-testsuite optional fixture overrides
+#
+
+@pytest.fixture
+def instance_metadata():
+    return {
+        "name": "Firm",
+        "software": "firm",
+    }
+
+@pytest.fixture
+def local_base_url(test_client):
+    return test_client.base_url
+
+@pytest.fixture
+def local_get(test_client: TestClient):
+    def _get(url: str, media_type: str = "application/json"):
+        response = test_client.get(url, headers={"Accept": media_type})
+        response.raise_for_status()
+        return response
+
+    return _get

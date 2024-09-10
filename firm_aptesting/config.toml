@@ -9,12 +9,13 @@ c2s.default = false
 # c2s.outbox.post.Create = true
 # c2s.outbox.post.Update = true
 # c2s.outbox.post.Delete = true
-# c2s.outbox.post.Follow = true
+c2s.outbox.post.Follow = true
 # c2s.outbox.post.Add = false
 # c2s.outbox.post.Remove = false
 # c2s.outbox.post.Like = true
 # c2s.outbox.post.Block = false
-# c2s.outbox.post.Undo = true
+#c2s.outbox.post.Undo.default = false
+#c2s.outbox.post.Undo.Follow = true
 
 ### S2S
 s2s.default = false
@@ -31,14 +32,15 @@ s2s.default = false
 # s2s.inbox.post.Remove = true
 # s2s.inbox.post.Like = true
 # s2s.inbox.post.Announce = true
-# s2s.inbox.post.Undo = true
+s2s.inbox.post.Undo.default = false
+s2s.inbox.post.Undo.Follow = true
 # s2s.inbox.shared = true
 
 ### Collections support - both spec'ed and custom
 collections.default = false
 # collections.liked = false
-# collections.followers = false
-# collections.following = false
+collections.followers = true
+collections.following = true
 # collections.custom = false
 
 ### Other AP featuress
@@ -47,8 +49,8 @@ collections.default = false
 # audience = false
 
 ### Other non-AP features
-webfinger = false
-nodeinfo = false
+webfinger = true
+nodeinfo = true
 x-nodeinfo2 = false
 host-meta = false
 portable_contacts = false # poco
