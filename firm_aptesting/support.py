@@ -1,6 +1,8 @@
 from __future__ import annotations
 import asyncio
+import collections
 from dataclasses import dataclass, field
+import json
 from typing import Any, Callable, cast, override
 import uuid
 import pytest
@@ -19,7 +21,7 @@ from activitypub_testsuite.support import BaseActor
 from firm.interfaces import ResourceStore, FIRM_NS
 from firm_server.config import ServerConfig
 from starlette.testclient import TestClient
-
+from httpx import Response as HTTPXResponse
 
 @dataclass
 class StubHttpResponse:
@@ -90,7 +92,13 @@ class FirmLocalActor(BaseActor):
         self, properties: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         """Set up an activity so that it can be retrieved from a local/remote server."""
-        raise NotImplementedError()
+        properties = properties or {}
+        if "type" not in properties:
+            properties["type"] = "Create"
+        if "id" not in properties:
+            properties["id"] = f"{self.base_url}/{properties['type'].lower()}/{uuid.uuid4()}"
+        self._save(properties)
+        return properties
 
     # TODO Review the arguments for setup_object abstract method
     @override
@@ -252,14 +260,35 @@ cF38UF2egml5YnqtcLl3/ukCAwEAAQ==
 class FirmRemoteCommunicator(RemoteCommunicator):
     def __init__(self, server: FirmServerTestSupport):
         self.server = server
+        self.requests = collections.defaultdict(list)
 
+    def handle_request(self, request: dict[str, Any]) -> HTTPXResponse:
+        self.requests[request.method].append(request)
+        # if request["method"] == "GET":
+        #     return self.get_request(request["selector"])
+        # elif request["method"] == "POST":
+        #     return self.post_request(request["selector"], request["data"])
+        return HTTPXResponse(status_code=200)
+
+    
     @override
     def get_request(self, selector: Callable[..., RemoteRequest]):
         raise NotImplementedError()
+        # for method in self.requests:
+        #     for request in self.requests[method]:
+        #         if selector(request):
+        #             return request
+
 
     @override
     def get_most_recent_post(self):
-        raise NotImplementedError
+        requests = self.requests["POST"]
+        request = requests[0] if requests else None
+        if request and request.headers["content-type"] == "application/activity+json":
+            setattr(request, "json", json.loads(request.content))
+        # TODO Create an adapter for this...
+        setattr(request, "path", request.url.path)
+        return request
 
 
 class FirmServerTestSupport(ServerTestSupport):
@@ -268,7 +297,7 @@ class FirmServerTestSupport(ServerTestSupport):
         self.config = cast(ServerConfig, request.getfixturevalue("server_config"))
         self.store = cast(ResourceStore, request.getfixturevalue("server_store"))
         self.client = cast(TestClient, request.getfixturevalue("test_client"))
-        self._communicator = FirmRemoteCommunicator(self)
+        self.communicator = FirmRemoteCommunicator(self)
 
     def _save(self, obj: dict[str, Any]):
         async def _async_save():
@@ -277,46 +306,56 @@ class FirmServerTestSupport(ServerTestSupport):
         asyncio.run(_async_save())
 
     def get_local_actor(self, actor_name: str = None) -> Actor:
+        actor_uri = f"https://server.test/{actor_name or 'local_actor'}"
         profile = {
             "@context": [
                 "https://www.w3.org/ns/activitystreams",
                 "https://w3id.org/security/v1",
             ],
-            "id": "https://server.test/actor",
+            "id": actor_uri,
             # TODO check in webfinger server that type is available
             "type": "Person",
-            "outbox": "https://server.test/actor/outbox",
-            "inbox": "https://server.test/actor/inbox",
-            "followers": "https://server.test/actor/followers",
+            "outbox": f"{actor_uri}/outbox",
+            "inbox": f"{actor_uri}/inbox",
+            "followers": f"{actor_uri}/followers",
+            "following": f"{actor_uri}/following",
             "preferredUsername": "actor",
             "alsoKnownAs": "acct:actor@server.test",
             "publicKey": {
-                "id": "https://server.test/actor#main-key",
-                "owner": "https://server.test/actor",
+                "id": f"{actor_uri}#main-key",
+                "owner": actor_uri,
                 "publicKeyPem": PUBLIC_KEY,
             },
         }  # TODO create an actor factory
         self._save(profile)
         self._save(
             {
-                "id": "https://server.test/actor/outbox",
-                "attributedTo": "https://server.test/actor",
+                "id": f"{actor_uri}/outbox",
+                "attributedTo": actor_uri,
                 "type": "OrderedCollection",
                 "totalItems": 0,
             }
         )
         self._save(
             {
-                "id": "https://server.test/actor/inbox",
-                "attributedTo": "https://server.test/actor",
+                "id": f"{actor_uri}/inbox",
+                "attributedTo": actor_uri,
                 "type": "OrderedCollection",
                 "totalItems": 0,
             }
         )
         self._save(
             {
-                "id": "https://server.test/actor/followers",
-                "attributedTo": "https://server.test/actor",
+                "id": f"{actor_uri}/followers",
+                "attributedTo": actor_uri,
+                "type": "Collection",
+                "totalItems": 0,
+            }
+        )
+        self._save(
+            {
+                "id": f"{actor_uri}/following",
+                "attributedTo": actor_uri,
                 "type": "Collection",
                 "totalItems": 0,
             }
@@ -325,7 +364,7 @@ class FirmServerTestSupport(ServerTestSupport):
             {
                 "id": f"urn:uuid:{uuid.uuid4()}",
                 "type": FIRM_NS.Credentials.value,
-                "attributedTo": "https://server.test/actor",
+                "attributedTo": actor_uri,
                 FIRM_NS.privateKey.value: PRIVATE_KEY,
             }
         )
@@ -382,4 +421,4 @@ class FirmServerTestSupport(ServerTestSupport):
         return FirmRemoteActor(self, profile)
 
     def get_remote_communicator(self) -> RemoteCommunicator:
-        return self._communicator
+        return self.communicator
