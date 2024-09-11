@@ -10,9 +10,10 @@ from firm.store.memory import MemoryResourceStore
 
 from starlette.testclient import TestClient
 
-def pytest_configure():
+def pytest_configure(config):
     pkg_dir = os.path.dirname(os.path.realpath(__file__))
     install_fedi_tests(os.path.join(pkg_dir, "tests"))  # noqa: F405
+    config.option.json_report_file = 'test-report.json'
 
 @pytest.fixture(scope="session")
 def server_test_directory():

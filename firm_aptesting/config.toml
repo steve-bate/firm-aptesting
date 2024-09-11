@@ -1,5 +1,5 @@
 [server.capabilities]
-dereferencing.default = false
+dereferencing = true
 # dereferencing.authz = false
 ### C2S
 c2s.default = false
@@ -20,9 +20,9 @@ c2s.outbox.post.Follow = true
 ### S2S
 s2s.default = false
 # s2s.inbox.default = true
-# s2s.inbox.get = true
-# s2s.inbox.post = true
-# s2s.inbox.post.Create = true
+s2s.inbox.get = true
+# s2s.inbox.post.default = true
+s2s.inbox.post.Create = true
 # s2s.inbox.post.Update = true
 # s2s.inbox.post.Delete = true
 # s2s.inbox.post.Follow = true

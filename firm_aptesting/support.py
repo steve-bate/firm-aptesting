@@ -64,10 +64,8 @@ class FirmLocalActor(BaseActor):
         headers = {}
         if media_type:
             headers["Content-Type"] = media_type
-        response = self.server.client.post(url, json=data, headers=headers, auth=self.auth)
-        response.raise_for_status()
-        return response
-    
+        return self.server.client.post(url, json=data, headers=headers, auth=self.auth)
+
     @override
     def get(
         self,
@@ -77,18 +75,15 @@ class FirmLocalActor(BaseActor):
     ) -> HttpResponse:
         if exception:
             raise Exception("Exception for testing")
-        response = self.server.client.get(
+        return self.server.client.get(
             url, headers={"Accept": media_type}, auth=self.auth
         )
-        response.raise_for_status()
-        return response
 
-    # def get_json(self, url: str | dict, proxy=False, exception=True) -> dict:
-    #     print("@@@@ GET JSON")
-    #     return {
-    #         "@context": "https://www.w3.org/ns/activitystreams",
-    #         "object": "https://server.test/actor/1",
-    #     }
+    def _save(self, resource: dict[str, Any]):
+        async def _async_save():
+            await self.server.store.put(resource)
+
+        asyncio.run(_async_save())
 
     @override
     def setup_activity(
@@ -97,26 +92,22 @@ class FirmLocalActor(BaseActor):
         """Set up an activity so that it can be retrieved from a local/remote server."""
         raise NotImplementedError()
 
-    async def setup_object_async(
-        self,
-        properties: dict[str, Any] | None = None,
-        with_id: bool = False,
-    ) -> dict[str, Any]:
-        """Set up an object so that it can be retrieved from a local/remote server."""
-        if with_id:
-            properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
-        await self.server.store.put(properties)
-        return properties
-
     # TODO Review the arguments for setup_object abstract method
     @override
     def setup_object(
         self,
         properties: dict[str, Any] | None = None,
-        with_id: bool = False,
+        with_id: bool = True,
     ) -> dict[str, Any]:
         """Set up an object so that it can be retrieved from a local/remote server."""
-        return asyncio.run(self.setup_object_async(properties, with_id))
+        properties = properties or {}
+        if with_id and "id" not in properties:
+            properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
+        if "type" not in properties:
+            properties["type"] = "Note"
+        self._save(properties)
+        return properties
+
 
 class FirmRemoteActor(BaseActor):
     def __init__(self, server: FirmServerTestSupport, profile: dict, auth: Any = None):
@@ -139,9 +130,7 @@ class FirmRemoteActor(BaseActor):
         headers = {}
         if media_type:
             headers["Content-Type"] = media_type
-        response = self.server.client.post(url, json=data, headers=headers, auth=self.auth)
-        response.raise_for_status()
-        return response
+        return self.server.client.post(url, json=data, headers=headers, auth=self.auth)
 
     @override
     def get(
@@ -152,12 +141,9 @@ class FirmRemoteActor(BaseActor):
     ) -> HttpResponse:
         if exception:
             raise Exception("Exception for testing")
-        response = self.server.client.get(
+        return self.server.client.get(
             url, headers={"Accept": media_type}, auth=self.auth
         )
-        response.raise_for_status()
-        return response
-
 
     @override
     def setup_activity(
@@ -168,6 +154,8 @@ class FirmRemoteActor(BaseActor):
             properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
         if "actor" not in properties:
             properties["actor"] = self.id
+        if "type" not in properties:
+            properties["type"] = "Create"
         self._save(properties)
         return properties
 
@@ -181,12 +169,14 @@ class FirmRemoteActor(BaseActor):
     def setup_object(
         self,
         properties: dict[str, Any] | None = None,
-        with_id: bool = False,
+        with_id: bool = True,
     ) -> dict[str, Any]:
-        if with_id:
+        properties = properties or {}
+        if with_id and "id" not in properties:
             properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
         """Set up an object so that it can be retrieved from a local/remote server."""
         return self._save(properties)
+
 
 PRIVATE_KEY = """-----BEGIN PRIVATE KEY-----
 MIIJQQIBADANBgkqhkiG9w0BAQEFAASCCSswggknAgEAAoICAQC3stI3C9K+MwxO
@@ -271,6 +261,7 @@ class FirmRemoteCommunicator(RemoteCommunicator):
     def get_most_recent_post(self):
         raise NotImplementedError
 
+
 class FirmServerTestSupport(ServerTestSupport):
     def __init__(self, local_base_url, remote_base_url, request: pytest.FixtureRequest):
         super().__init__(local_base_url, remote_base_url, request)
@@ -348,7 +339,7 @@ class FirmServerTestSupport(ServerTestSupport):
             "type": "Person",
             "outbox": f"https://remote.test/{actor_name}/outbox",
             "inbox": f"https://remote.test/{actor_name}/inbox",
-                "publicKey": {
+            "publicKey": {
                 "id": f"https://remote.test/{actor_name}#main-key",
                 "owner": f"https://remote.test/{actor_name}",
                 "publicKeyPem": PUBLIC_KEY,
@@ -366,8 +357,29 @@ class FirmServerTestSupport(ServerTestSupport):
         auth = HTTPSignatureAuth(profile["publicKey"]["id"], PRIVATE_KEY)
         return FirmRemoteActor(self, profile, auth=auth)
 
-    def get_unauthenticated_actor(self, actor_name: str) -> Actor:
-        raise NotImplementedError()
+    def get_unauthenticated_actor(self, actor_name: str | None = None) -> Actor:
+        actor_name = actor_name or "unauthenticated"
+        profile = {
+            "id": f"https://remote.test/{actor_name}",
+            "type": "Person",
+            "outbox": f"https://remote.test/{actor_name}/outbox",
+            "inbox": f"https://remote.test/{actor_name}/inbox",
+            "publicKey": {
+                "id": f"https://remote.test/{actor_name}#main-key",
+                "owner": f"https://remote.test/{actor_name}",
+                "publicKeyPem": PUBLIC_KEY,
+            },
+        }
+        self._save(profile)
+        self._save(
+            {
+                "id": f"urn:uuid:{uuid.uuid4()}",
+                "type": FIRM_NS.Credentials.value,
+                "attributedTo": f"https://remote.test/{actor_name}",
+                FIRM_NS.privateKey.value: PRIVATE_KEY,
+            }
+        )
+        return FirmRemoteActor(self, profile)
 
     def get_remote_communicator(self) -> RemoteCommunicator:
         return self._communicator
