@@ -11,6 +11,7 @@ python = "^3.12"
 activitypub-testsuite = {path = "../activitypub-testsuite", develop = true}
 firm-server = {path = "../../firm-server", develop = true}
 pytest-httpx = "^0.30.0"
+firm-jsonschema = {path = "../../firm-jsonschema", develop = true}
 
 
 [tool.poetry.group.dev.dependencies]
