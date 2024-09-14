@@ -23,6 +23,7 @@ from firm_server.config import ServerConfig
 from starlette.testclient import TestClient
 from httpx import Response as HTTPXResponse
 
+
 @dataclass
 class StubHttpResponse:
     status_code: int
@@ -96,7 +97,16 @@ class FirmLocalActor(BaseActor):
         if "type" not in properties:
             properties["type"] = "Create"
         if "id" not in properties:
-            properties["id"] = f"{self.base_url}/{properties['type'].lower()}/{uuid.uuid4()}"
+            activity_type = (
+                "-".join(
+                    properties["type"]
+                    if isinstance(properties["type"], list)
+                    else [properties["type"]]
+                )
+            ).lower()
+            properties["id"] = f"{self.base_url}/{activity_type}/{uuid.uuid4()}"
+        if "actor" not in properties:
+            properties["actor"] = self.id
         self._save(properties)
         return properties
 
@@ -172,6 +182,7 @@ class FirmRemoteActor(BaseActor):
             await self.server.store.put(resource)
 
         asyncio.run(_async_save())
+        return resource
 
     @override
     def setup_object(
@@ -270,7 +281,6 @@ class FirmRemoteCommunicator(RemoteCommunicator):
         #     return self.post_request(request["selector"], request["data"])
         return HTTPXResponse(status_code=200)
 
-    
     @override
     def get_request(self, selector: Callable[..., RemoteRequest]):
         raise NotImplementedError()
@@ -278,7 +288,6 @@ class FirmRemoteCommunicator(RemoteCommunicator):
         #     for request in self.requests[method]:
         #         if selector(request):
         #             return request
-
 
     @override
     def get_most_recent_post(self):

@@ -1,21 +1,25 @@
 [server.capabilities]
 dereferencing = true
+iri_mapping = false # "iri"
+recipient_merging = false
+
 # dereferencing.authz = false
 ### C2S
 c2s.default = false
 # c2s.outbox.default = true
 # c2s.outbox.get = true
 c2s.outbox.post.default = true
-# c2s.outbox.post.Create = true
-# c2s.outbox.post.Update = true
-# c2s.outbox.post.Delete = true
+c2s.outbox.post.Create = false
+c2s.outbox.post.Update.default = false
+c2s.outbox.post.Update.partial = false
+c2s.outbox.post.Delete = false
 c2s.outbox.post.Follow = true
-# c2s.outbox.post.Add = false
-# c2s.outbox.post.Remove = false
-# c2s.outbox.post.Like = true
-# c2s.outbox.post.Block = false
+c2s.outbox.post.Add = false
+c2s.outbox.post.Remove = false
+c2s.outbox.post.Like = false
+c2s.outbox.post.Block = false
 #c2s.outbox.post.Undo.default = false
-#c2s.outbox.post.Undo.Follow = true
+c2s.outbox.post.Undo.Follow = false
 
 ### S2S
 s2s.default = false
