@@ -193,6 +193,8 @@ class FirmRemoteActor(BaseActor):
         properties = properties or {}
         if with_id and "id" not in properties:
             properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
+        if "type" not in properties:
+            properties["type"] = "Note"
         """Set up an object so that it can be retrieved from a local/remote server."""
         return self._save(properties)
 
