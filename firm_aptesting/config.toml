@@ -1,25 +1,35 @@
 [server.capabilities]
 dereferencing = true
 iri_mapping = false # "iri"
-recipient_merging = false
+audience_delivery = false
 
 # dereferencing.authz = false
 ### C2S
 c2s.default = false
 # c2s.outbox.default = true
-# c2s.outbox.get = true
+c2s.outbox.get = true
 c2s.outbox.post.default = true
-c2s.outbox.post.Create = false
+c2s.outbox.post.Create = true
 c2s.outbox.post.Update.default = false
 c2s.outbox.post.Update.partial = false
-c2s.outbox.post.Delete = false
+c2s.outbox.post.Delete = true
 c2s.outbox.post.Follow = true
-c2s.outbox.post.Add = false
-c2s.outbox.post.Remove = false
-c2s.outbox.post.Like = false
-c2s.outbox.post.Block = false
-c2s.outbox.post.Undo.default = false
+c2s.outbox.post.Add = true
+c2s.outbox.post.Remove = true
+c2s.outbox.post.Like = true
+c2s.outbox.post.Block = true
+c2s.outbox.post.Undo.default = true
 c2s.outbox.post.Undo.Follow = false
+c2s.outbox.post.Undo.Like = true
+
+c2s.outbox.post.multityped = true
+c2s.outbox.post.delivery.local = true
+c2s.outbox.post.delivery.remote = true
+
+c2s.collections.custom = true
+# c2s.collections.liked = true
+
+# c2s.recipient_merging = true
 
 ### S2S
 s2s.default = false
@@ -41,13 +51,13 @@ s2s.inbox.post.Reject.Follow = true
 # s2s.inbox.post.Undo.default = false
 s2s.inbox.post.Undo.Follow = true
 # s2s.inbox.shared = true
+s2s.collections.custom = false
 
 ### Collections support - both spec'ed and custom
 collections.default = false
-# collections.liked = false
 collections.followers = true
 collections.following = true
-# collections.custom = false
+collections.shares = true
 
 ### Other AP featuress
 # tombstones = true

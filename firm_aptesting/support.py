@@ -84,7 +84,12 @@ class FirmLocalActor(BaseActor):
 
     def _save(self, resource: dict[str, Any]):
         async def _async_save():
-            await self.server.store.put(resource)
+            store = (
+                self.server.tenant.private_store
+                if resource["id"].startswith("urn:")
+                else self.server.tenant.public_store
+            )
+            await store.put(resource)
 
         asyncio.run(_async_save())
 
@@ -126,6 +131,22 @@ class FirmLocalActor(BaseActor):
         self._save(properties)
         return properties
 
+    @override
+    def setup_collection(
+        self,
+        properties: dict | None = None,
+        ordered: bool = False,
+        name: str = "collection",
+        collection_type: str = "Collection",
+        for_object_id: str | None = None,
+    ) -> str:
+        """Make a collection object and add it to the object storage."""
+        collection = self.make_collection(
+            properties, ordered, name, collection_type
+        )
+        collection["attributedTo"] = self.id
+        self._save(collection)
+        return collection
 
 class FirmRemoteActor(BaseActor):
     def __init__(self, server: FirmServerTestSupport, profile: dict, auth: Any = None):
@@ -165,7 +186,8 @@ class FirmRemoteActor(BaseActor):
 
     @override
     def setup_activity(
-        self, properties: dict[str, Any] | None = None
+        self, properties: dict[str, Any] | None = None,
+        with_id: bool = False
     ) -> dict[str, Any]:
         """Set up an activity so that it can be retrieved from a local/remote server."""
         if "id" not in properties:
@@ -174,12 +196,19 @@ class FirmRemoteActor(BaseActor):
             properties["actor"] = self.id
         if "type" not in properties:
             properties["type"] = "Create"
+        if with_id and "id" not in properties:
+            properties["id"] = f"{self.base_url}/{uuid.uuid4()}"
         self._save(properties)
         return properties
 
     def _save(self, resource: dict[str, Any]):
         async def _async_save():
-            await self.server.store.put(resource)
+            store = (
+                self.server.tenant.private_store
+                if resource["id"].startswith("urn:")
+                else self.server.tenant.public_store
+            )
+            await store.put(resource)
 
         asyncio.run(_async_save())
         return resource
@@ -306,13 +335,18 @@ class FirmServerTestSupport(ServerTestSupport):
     def __init__(self, local_base_url, remote_base_url, request: pytest.FixtureRequest):
         super().__init__(local_base_url, remote_base_url, request)
         self.config = cast(ServerConfig, request.getfixturevalue("server_config"))
-        self.store = cast(ResourceStore, request.getfixturevalue("server_store"))
         self.client = cast(TestClient, request.getfixturevalue("test_client"))
+        self.tenant = list(self.client.app.state.tenants.values())[0]
         self.communicator = FirmRemoteCommunicator(self)
 
     def _save(self, obj: dict[str, Any]):
         async def _async_save():
-            await self.store.put(obj)
+            store = (
+                self.tenant.private_store
+                if obj["id"].startswith("urn:")
+                else self.tenant.public_store
+            )
+            await store.put(obj)
 
         asyncio.run(_async_save())
 
@@ -330,6 +364,7 @@ class FirmServerTestSupport(ServerTestSupport):
             "inbox": f"{actor_uri}/inbox",
             "followers": f"{actor_uri}/followers",
             "following": f"{actor_uri}/following",
+            "liked": f"{actor_uri}/liked",
             "preferredUsername": "actor",
             "alsoKnownAs": "acct:actor@server.test",
             "publicKey": {
@@ -366,6 +401,14 @@ class FirmServerTestSupport(ServerTestSupport):
         self._save(
             {
                 "id": f"{actor_uri}/following",
+                "attributedTo": actor_uri,
+                "type": "Collection",
+                "totalItems": 0,
+            }
+        )
+        self._save(
+            {
+                "id": f"{actor_uri}/liked",
                 "attributedTo": actor_uri,
                 "type": "Collection",
                 "totalItems": 0,

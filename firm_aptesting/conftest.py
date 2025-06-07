@@ -2,10 +2,9 @@ import os
 from activitypub_testsuite.interfaces import ServerTestSupport
 from activitypub_testsuite.fixtures import *
 import pytest
-from pytest_httpx import httpx_mock
 
 from firm_aptesting.support import FirmServerTestSupport  # noqa
-from firm_server.config import ServerConfig
+from firm_server.config import ServerConfig, MemoryStoreConfig
 import firm_server.server
 from firm.store.memory import MemoryResourceStore
 
@@ -14,6 +13,7 @@ from httpx import Request as HTTPXRequest, Response as HTTPXResponse
 from pytest_httpx import HTTPXMock
 
 from .support import FirmRemoteCommunicator
+import asyncio
 
 def pytest_configure(config):
     pkg_dir = os.path.dirname(os.path.realpath(__file__))
@@ -41,7 +41,7 @@ def server_support(
 
 
 @pytest.fixture
-def remote_communicator(server_support):
+def remote_communicator(server_support) -> FirmRemoteCommunicator:
     return server_support.communicator
 
 @pytest.fixture
@@ -56,24 +56,28 @@ def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommu
 
 
 @pytest.fixture
-def server_store():
-    return MemoryResourceStore()
-
-
-@pytest.fixture
-def server_config(server_store):
+def server_config():
     return ServerConfig(
         [
             "https://server.test",
         ],
-        server_store,
+        store=MemoryStoreConfig()
     )
 
 
 @pytest.fixture
-def server_app(server_config, server_store):
+def server_app(server_config):
     firm_server.server._app = None
-    return firm_server.server.app_factory(server_config, server_store)
+    app = firm_server.server.app_factory(server_config)
+    # Setup the lifespan context
+    lifespan = app.router.lifespan_context(app)
+    
+    # Define the startup function that will be run
+    async def async_startup():
+        async with lifespan:
+            pass  # Startup is done, but keep context active
+    asyncio.run(async_startup())
+    return app
 
 
 @pytest.fixture
