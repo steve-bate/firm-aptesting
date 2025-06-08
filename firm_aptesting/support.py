@@ -327,6 +327,7 @@ class FirmRemoteCommunicator(RemoteCommunicator):
         if request and request.headers["content-type"] == "application/activity+json":
             setattr(request, "json", json.loads(request.content))
         # TODO Create an adapter for this...
+        assert request is not None, "No POST request found"
         setattr(request, "path", request.url.path)
         return request
 
@@ -432,6 +433,7 @@ class FirmServerTestSupport(ServerTestSupport):
             "type": "Person",
             "outbox": f"https://remote.test/{actor_name}/outbox",
             "inbox": f"https://remote.test/{actor_name}/inbox",
+            "followers": f"https://remote.test/{actor_name}/followers",
             "publicKey": {
                 "id": f"https://remote.test/{actor_name}#main-key",
                 "owner": f"https://remote.test/{actor_name}",
@@ -439,6 +441,14 @@ class FirmServerTestSupport(ServerTestSupport):
             },
         }
         self._save(profile)
+        self._save(
+            {
+                "id": profile["followers"],
+                "attributedTo": profile["id"],
+                "type": "Collection",
+                "totalItems": 0,
+            }
+        )
         self._save(
             {
                 "id": f"urn:uuid:{uuid.uuid4()}",

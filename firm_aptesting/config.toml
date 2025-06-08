@@ -1,7 +1,7 @@
 [server.capabilities]
 dereferencing = true
 iri_mapping = false # "iri"
-audience_delivery = false
+audience.authorization = true
 
 # dereferencing.authz = false
 ### C2S
@@ -19,7 +19,7 @@ c2s.outbox.post.Remove = true
 c2s.outbox.post.Like = true
 c2s.outbox.post.Block = true
 c2s.outbox.post.Undo.default = true
-c2s.outbox.post.Undo.Follow = false
+c2s.outbox.post.Undo.Follow = true
 c2s.outbox.post.Undo.Like = true
 
 c2s.outbox.post.multityped = true
@@ -30,6 +30,8 @@ c2s.collections.custom = true
 # c2s.collections.liked = true
 
 # c2s.recipient_merging = true
+c2s.audience.delivery = false
+
 
 ### S2S
 s2s.default = false
@@ -62,7 +64,7 @@ collections.shares = true
 ### Other AP featuress
 # tombstones = true
 # Some AP servers don't support standard audience processing
-audience = false
+
 
 ### Other non-AP features
 webfinger = true
