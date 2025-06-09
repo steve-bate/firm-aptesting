@@ -115,7 +115,6 @@ class FirmLocalActor(BaseActor):
         self._save(properties)
         return properties
 
-    # TODO Review the arguments for setup_object abstract method
     @override
     def setup_object(
         self,
@@ -326,7 +325,6 @@ class FirmRemoteCommunicator(RemoteCommunicator):
         request = requests[0] if requests else None
         if request and request.headers["content-type"] == "application/activity+json":
             setattr(request, "json", json.loads(request.content))
-        # TODO Create an adapter for this...
         assert request is not None, "No POST request found"
         setattr(request, "path", request.url.path)
         return request
@@ -359,7 +357,6 @@ class FirmServerTestSupport(ServerTestSupport):
                 "https://w3id.org/security/v1",
             ],
             "id": actor_uri,
-            # TODO check in webfinger server that type is available
             "type": "Person",
             "outbox": f"{actor_uri}/outbox",
             "inbox": f"{actor_uri}/inbox",
@@ -373,7 +370,7 @@ class FirmServerTestSupport(ServerTestSupport):
                 "owner": actor_uri,
                 "publicKeyPem": PUBLIC_KEY,
             },
-        }  # TODO create an actor factory
+        }
         self._save(profile)
         self._save(
             {
