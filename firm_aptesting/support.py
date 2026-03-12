@@ -18,8 +18,8 @@ from activitypub_testsuite.interfaces import (
     RemoteCommunicator,
 )
 from activitypub_testsuite.support import BaseActor
-from firm.interfaces import ResourceStore, FIRM_NS
-from firm_server.config import ServerConfig
+from firm.core.interfaces import ResourceStore, FIRM_NS
+from firm.server.config import ServerConfig
 from starlette.testclient import TestClient
 from httpx import Response as HTTPXResponse
 

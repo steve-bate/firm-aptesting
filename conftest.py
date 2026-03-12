@@ -3,21 +3,21 @@ from activitypub_testsuite.interfaces import ServerTestSupport
 from activitypub_testsuite.fixtures import *
 import pytest
 
-from firm_aptesting.support import FirmServerTestSupport  # noqa
-from firm_server.config import ServerConfig, MemoryStoreConfig
-import firm_server.server
-from firm.store.memory import MemoryResourceStore
+from firm.server.config import ServerConfig, MemoryStoreConfig
+import firm.server.server
+from firm.core.store.memory import MemoryResourceStore
 
 from starlette.testclient import TestClient
 from httpx import Request as HTTPXRequest, Response as HTTPXResponse
 from pytest_httpx import HTTPXMock
 
-from .support import FirmRemoteCommunicator
+from firm_aptesting.support import FirmServerTestSupport  # noqa
+from firm_aptesting.support import FirmRemoteCommunicator
 import asyncio
 
 def pytest_configure(config):
-    pkg_dir = os.path.dirname(os.path.realpath(__file__))
-    install_fedi_tests(os.path.join(pkg_dir, "tests"))  # noqa: F405
+    # pkg_dir = os.path.dirname(os.path.realpath(__file__))
+    # install_fedi_tests(os.path.join(pkg_dir, "tests"))  # noqa: F405
     config.option.json_report_file = "test-report.json"
 
 
@@ -48,27 +48,27 @@ def remote_communicator(server_support) -> FirmRemoteCommunicator:
 def assert_all_responses_were_requested() -> bool:
     return False
 
-@pytest.fixture(autouse=True)
-def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommunicator):
-    def _handle_request(request: HTTPXRequest) -> HTTPXResponse:
-        return remote_communicator.handle_request(request)
-    httpx_mock.add_callback(_handle_request)
+# @pytest.fixture(autouse=True)
+# def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommunicator):
+#     def _handle_request(request: HTTPXRequest) -> HTTPXResponse:
+#         return remote_communicator.handle_request(request)
+#     httpx_mock.add_callback(_handle_request)
 
 
 @pytest.fixture
-def server_config():
+def server_config(tmp_path) -> ServerConfig:
     return ServerConfig(
         [
             "https://server.test",
         ],
-        store=MemoryStoreConfig()
+        store=MemoryStoreConfig(files=tmp_path),
     )
 
 
 @pytest.fixture
 def server_app(server_config):
-    firm_server.server._app = None
-    app = firm_server.server.app_factory(server_config)
+    firm.server.server._app = None
+    app = firm.server.server.app_factory(server_config)
     # Setup the lifespan context
     lifespan = app.router.lifespan_context(app)
     
@@ -82,15 +82,6 @@ def server_app(server_config):
 
 @pytest.fixture
 def test_client(server_app) -> TestClient:
-    #     app: ASGIApp,
-    #     base_url: str = "http://testserver",
-    #     raise_server_exceptions: bool = True,
-    #     root_path: str = "",
-    #     backend: typing.Literal["asyncio", "trio"] = "asyncio",
-    #     backend_options: dict[str, typing.Any] | None = None,
-    #     cookies: httpx._types.CookieTypes | None = None,
-    #     headers: dict[str, str] | None = None,
-    #     follow_redirects: bool = True,
     return TestClient(server_app, base_url="https://server.test")
 
 
@@ -121,8 +112,4 @@ def local_get(test_client: TestClient):
 
     return _get
 
-
-#
-# Mock HTTPx
-#
 

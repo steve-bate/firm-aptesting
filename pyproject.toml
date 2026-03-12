@@ -1,32 +1,43 @@
-[tool.poetry]
+[project]
 name = "firm-aptesting"
 version = "0.1.0"
 description = "ActivityPub Test Suite for firm"
-authors = ["Steve Bate <svc-github@stevebate.net>"]
 readme = "README.md"
+requires-python = ">=3.14"
+authors = [
+    {name = "Steve Bate", email = "svc-github@stevebate.net"},
+]
+dependencies = [
+    "activitypub-testsuite",
+    "firm",
+    "pytest-httpx>=0.30.0",
+]
 
+[dependency-groups]
+dev = [
+    "pre-commit>=3.8.0",
+    "pytest>=8.3.2",
+    "pytest-asyncio>=0.26.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-activitypub-testsuite = {path = "../activitypub-testsuite", develop = true}
-firm-server = {path = "../../firm-server", develop = true}
-pytest-httpx = "^0.30.0"
-firm-jsonschema = {path = "../../firm-jsonschema", develop = true}
-
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^3.8.0"
-pytest = "^8.3.2"
-pytest-asyncio = "^0.24.0"
-
+[tool.uv.sources]
+activitypub-testsuite = { path = "../activitypub-testsuite", editable = true }
+firm = { path = "../firm", editable = true }
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["firm_aptesting"]
 
 
 [tool.pytest.ini_options]
 # asyncio_mode = "auto"
+addopts = [".", "--pyargs", "activitypub_testsuite.tests"]
+filterwarnings = [
+    "ignore:'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16:DeprecationWarning:pytest_asyncio.plugin",
+]
 markers = [
     "ap_reqlevel: ActivityPub requirements level",
     "ap_capability: ActivityPub/AS2 capability required for test",
