@@ -48,11 +48,11 @@ def remote_communicator(server_support) -> FirmRemoteCommunicator:
 def assert_all_responses_were_requested() -> bool:
     return False
 
-# @pytest.fixture(autouse=True)
-# def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommunicator):
-#     def _handle_request(request: HTTPXRequest) -> HTTPXResponse:
-#         return remote_communicator.handle_request(request)
-#     httpx_mock.add_callback(_handle_request)
+@pytest.fixture(autouse=True)
+def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommunicator):
+    def _handle_request(request: HTTPXRequest) -> HTTPXResponse:
+        return remote_communicator.handle_request(request)
+    httpx_mock.add_callback(_handle_request, is_optional=True, is_reusable=True)
 
 
 @pytest.fixture

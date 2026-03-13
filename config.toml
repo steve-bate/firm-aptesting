@@ -17,8 +17,8 @@ c2s.outbox.post.Follow = true
 c2s.outbox.post.Add = true
 c2s.outbox.post.Remove = true
 c2s.outbox.post.Like = true
-c2s.outbox.post.Block = true
-c2s.outbox.post.Undo.default = true
+c2s.outbox.post.Block = false
+c2s.outbox.post.Undo.default = false
 c2s.outbox.post.Undo.Follow = true
 c2s.outbox.post.Undo.Like = true
 

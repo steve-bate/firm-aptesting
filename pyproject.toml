@@ -33,7 +33,6 @@ packages = ["firm_aptesting"]
 
 
 [tool.pytest.ini_options]
-# asyncio_mode = "auto"
 addopts = [".", "--pyargs", "activitypub_testsuite.tests"]
 filterwarnings = [
     "ignore:'asyncio.get_event_loop_policy' is deprecated and slated for removal in Python 3.16:DeprecationWarning:pytest_asyncio.plugin",
