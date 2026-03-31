@@ -3,7 +3,7 @@ from activitypub_testsuite.interfaces import ServerTestSupport
 from activitypub_testsuite.fixtures import *
 import pytest
 
-from firm.server.config import ServerConfig, MemoryStoreConfig
+from firm.server.config import ServerConfig, TenantConfig, MemoryStoreConfig
 import firm.server.server
 from firm.core.store.memory import MemoryResourceStore
 
@@ -59,7 +59,7 @@ def setup_httpx_mock(httpx_mock: HTTPXMock, remote_communicator: FirmRemoteCommu
 def server_config(tmp_path) -> ServerConfig:
     return ServerConfig(
         [
-            "https://server.test",
+            TenantConfig("https://server.test"),
         ],
         store=MemoryStoreConfig(files=tmp_path),
     )
