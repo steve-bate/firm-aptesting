@@ -21,7 +21,8 @@ from activitypub_testsuite.support import BaseActor
 from firm.core.interfaces import ResourceStore, FIRM_NS
 from firm.server.config import ServerConfig
 from starlette.testclient import TestClient
-from httpx import Response as HTTPXResponse
+from httpx import Request as HTTPXRequest, Response as HTTPXResponse
+from urllib.parse import urlparse
 
 
 @dataclass
@@ -50,6 +51,7 @@ class FirmLocalActor(BaseActor):
     def __init__(self, server: FirmServerTestSupport, profile: dict, auth: Any = None):
         super().__init__(profile, "https://server.test", auth)
         self.server = server
+        self.actor_id = profile["id"]
 
     def get_actor_uri(self, server, actor_name):
         """Get the URI for an actor based on an actor handle."""
@@ -151,6 +153,7 @@ class FirmRemoteActor(BaseActor):
     def __init__(self, server: FirmServerTestSupport, profile: dict, auth: Any = None):
         super().__init__(profile, "https://remote.test", auth)
         self.server = server
+        self.actor_id = profile["id"]
 
     # def get_actor_uri(self, server, actor_name):
     #     """Get the URI for an actor based on an actor handle."""
@@ -179,8 +182,16 @@ class FirmRemoteActor(BaseActor):
     ) -> HttpResponse:
         if exception:
             raise Exception("Exception for testing")
+        target = str(url)
+        if target.startswith(self.base_url):
+            document = self.server.communicator.get(target)
+            if document is None:
+                return StubHttpResponse(status_code=404)
+            return StubHttpResponse(
+                status_code=200, headers={"content-type": media_type}, data=document
+            )
         return self.server.client.get(
-            url, headers={"Accept": media_type}, auth=self.auth
+            target, headers={"Accept": media_type}, auth=self.auth
         )
 
     @override
@@ -299,17 +310,56 @@ cF38UF2egml5YnqtcLl3/ukCAwEAAQ==
 
 
 class FirmRemoteCommunicator(RemoteCommunicator):
+    """The far side of the federation: what the fake remote serves and receives.
+
+    Firm can only reach a remote document by fetching it, so documents staged by
+    the harness are served here. Deliveries are recorded as requests, and a remote
+    actor's inbox is derived from them, so an inbox cannot disagree with what was
+    actually delivered.
+    """
+
     def __init__(self, server: FirmServerTestSupport):
         self.server = server
         self.requests = collections.defaultdict(list)
+        self.documents: dict[str, dict[str, Any]] = {}
 
-    def handle_request(self, request: dict[str, Any]) -> HTTPXResponse:
+    def put(self, document: dict[str, Any]) -> None:
+        self.documents[str(document["id"])] = document
+
+    def get(self, url: str) -> dict[str, Any] | None:
+        if document := self.documents.get(url):
+            return document
+        if urlparse(url).path.rstrip("/").endswith("/inbox"):
+            return self._inbox(url)
+        return None
+
+    def _inbox(self, url: str) -> dict[str, Any]:
+        delivered = [
+            json.loads(request.content)
+            for request in self.requests["POST"]
+            if str(request.url) == url and request.content
+        ]
+        return {
+            "id": url,
+            "type": "OrderedCollection",
+            "totalItems": len(delivered),
+            "orderedItems": delivered,
+        }
+
+    def handle_request(self, request: HTTPXRequest) -> HTTPXResponse:
         self.requests[request.method].append(request)
-        # if request["method"] == "GET":
-        #     return self.get_request(request["selector"])
-        # elif request["method"] == "POST":
-        #     return self.post_request(request["selector"], request["data"])
-        return HTTPXResponse(status_code=200)
+        if request.method == "GET":
+            document = self.get(str(request.url))
+            if document is None:
+                return HTTPXResponse(status_code=404)
+            return HTTPXResponse(
+                status_code=200,
+                json=document,
+                headers={"Content-Type": "application/activity+json"},
+            )
+        if request.method == "POST":
+            return HTTPXResponse(status_code=200)
+        return HTTPXResponse(status_code=405)
 
     @override
     def get_request(self, selector: Callable[..., RemoteRequest]):
@@ -339,6 +389,12 @@ class FirmServerTestSupport(ServerTestSupport):
         self.communicator = FirmRemoteCommunicator(self)
 
     def _save(self, obj: dict[str, Any]):
+        uri = str(obj["id"])
+        if not (uri.startswith(str(self.tenant.prefix)) or uri.startswith("urn:")):
+            # A document on another server: the fake remote must be able to serve
+            # it, since firm can only reach it by fetching.
+            self.communicator.put(obj)
+
         async def _async_save():
             store = (
                 self.tenant.private_store
