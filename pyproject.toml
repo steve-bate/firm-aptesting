@@ -33,7 +33,13 @@ packages = ["firm_aptesting"]
 
 
 [tool.pytest.ini_options]
-addopts = [".", "--pyargs", "activitypub_testsuite.tests"]
+# Tests are symlinked into ./tests from the installed `activitypub_testsuite`
+# package. They must live inside the workspace: the VS Code pytest plugin
+# builds its test tree from the workspace root, and silently refuses to run
+# tests whose paths fall outside it (it logs "Session path not a parent of
+# test paths" and the tests never execute). Do not point testpaths at
+# `activitypub_testsuite.tests` — that path is outside the workspace.
+testpaths = ["tests"]
 markers = [
     "ap_reqlevel: ActivityPub requirements level",
     "ap_capability: ActivityPub/AS2 capability required for test",

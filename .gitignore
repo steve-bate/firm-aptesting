@@ -167,3 +167,4 @@ cython_debug/
 .DS_Store
 .report.json
 *.code-workspace
+tests/
